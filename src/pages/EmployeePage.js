@@ -1,22 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { Table, Button, Form, Container } from 'react-bootstrap';
+import axios from 'axios';
 
 const EmployeePage = () => {
-  const [employees, setEmployees] = useState([
-    { id: 1, name: 'John Doe', position: 'Developer' },
-    { id: 2, name: 'Jane Smith', position: 'Designer' }
-  ]);
+
+  const [employees,setEmployees]=useState([]);
   const [newEmployee, setNewEmployee] = useState({ name: '', position: '' });
+
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  const fetchEmployees = async() => {
+    try {
+      const response = await axios.get('http://localhost:5000/employees');
+      setEmployees(response.data);
+    } catch (error) {
+      console.error('Error fetching employees:', error);
+    }
+  };
+
+  const handleAddEmployee = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/employees', newEmployee);
+      setEmployees([...employees, response.data]);
+      setNewEmployee({ name: '', position: '' });
+    } catch (error) {
+      console.error('Error adding employee:', error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewEmployee({ ...newEmployee, [name]: value });
   };
 
-  const handleAddEmployee = () => {
-    setEmployees([...employees, { id: employees.length + 1, ...newEmployee }]);
-    setNewEmployee({ name: '', position: '' });
-  };
 
   return (
     <Container>
@@ -24,7 +42,6 @@ const EmployeePage = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Position</th>
           </tr>
@@ -32,7 +49,6 @@ const EmployeePage = () => {
         <tbody>
           {employees.map((employee) => (
             <tr key={employee.id}>
-              <td>{employee.id}</td>
               <td>{employee.name}</td>
               <td>{employee.position}</td>
             </tr>
@@ -60,7 +76,7 @@ const EmployeePage = () => {
               onChange={handleInputChange}
             />
           </Form.Group>
-          <Button variant="primary" onClick={handleAddEmployee}>
+          <Button variant="primary" onClick={handleAddEmployee} >
             Add Employee
           </Button>
         </Form>

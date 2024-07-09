@@ -1,0 +1,24 @@
+{
+  "employees": [
+    {
+      "id": "1",
+      "name": "John Doe",
+      "position": "Developer"
+    },
+    {
+      "id": "2",
+      "name": "Jane Smith",
+      "position": "Designer"
+    },
+    {
+      "id": "317f",
+      "name": "Sandeep",
+      "position": "Tech lead"
+    },
+    {
+      "id": "c32b",
+      "name": "Ruby",
+      "position": "Digital Marketing Consultant"
+    }
+  ]
+}
